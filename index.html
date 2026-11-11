@@ -1110,7 +1110,7 @@ function frasesArmacao(r,ROLE){var usadas={},out=[];
 
 function result(){
  if(!window.IMGS_READY){app.innerHTML=head()+'<div class="hero"><h2>Quase lá!</h2><p>Estamos escolhendo as armações pra você.</p></div>';setTimeout(result,400);return}
- var pool=F.filter(function(f){return A.g=="feminina"?f.g!="masculino":A.g=="masculina"?f.g!="feminino":(f.x||f.g=="unissex")});
+ var pool=F.filter(function(f){return f.img&&(!window.temProvador||window.temProvador(f.img))}).filter(function(f){return A.g=="feminina"?f.g!="masculino":A.g=="masculina"?f.g!="feminino":(f.x||f.g=="unissex")});
  var same=pool.filter(function(f){return f.p==A.p}),real=same.filter(function(f){return f.img});pool=real.length>=3?real:(same.length?same:pool);
  var r=pool.map(function(f,i){return {f:f,s:score(f),i:i,c:f.k==A.k?1:0}}).sort(function(a,b){return b.c-a.c||b.s-a.s||a.i-b.i}).slice(0,3);
  var h=head()+'<div class="bar"><i style="width:100%"></i></div><div class="hero"><h2>Achamos '+r.length+(r.length==1?' armação':' armações')+' com a sua cara!</h2><p>Seu estilo é <b>'+ARQ[A.s][0]+'</b>. '+sorteia(TOPO[A.s])+' '+(r.length==1?'Escolhemos uma armação que diz':'Escolhemos armações que dizem')+' isso por você.</p></div>';

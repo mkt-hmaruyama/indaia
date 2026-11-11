@@ -1713,7 +1713,12 @@ function instBtn(){var t=document.querySelector(".hd-top");if(!t||$("inst")||jaI
  var b=document.createElement("button");b.className="inst";b.id="inst";b.setAttribute("aria-label","Baixar app");
  b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg><span>Baixar app</span>';
  t.insertBefore(b,$("lamp")||null);b.onclick=instClick}
-function instClick(){track("instalar_clicou",{sistema:ehIOS()?"ios":"android"});
+function ehChrome(){var u=navigator.userAgent;return /Android/.test(u)&&/Chrome\//.test(u)&&!/SamsungBrowser|OPR\/|Opera|EdgA|Edg\/|Firefox|UCBrowser|MiuiBrowser|HuaweiBrowser|DuckDuckGo|; wv\)|Instagram|FBAN|FBAV/.test(u)}
+function ehSamsung(){return /SamsungBrowser/.test(navigator.userAgent)}
+function instClick(){track("instalar_clicou",{sistema:ehIOS()?"ios":ehSamsung()?"samsung":"android"});
+ if(!ehIOS()&&!(ehChrome()&&IP)){if(!$("instios")){var s=document.createElement("div");s.id="instios";s.className="instios";
+  s.innerHTML='<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Baixe o app no seu celular</h3><div class="p"><i>1</i><span>Toque nos <b>3 '+(ehSamsung()?'tracinhos':'pontinhos')+'</b> do navegador</span></div><div class="p"><i>2</i><span>Toque em <b>'+(ehSamsung()?'Adicionar p\u00e1gina a</b> e depois em <b>Tela inicial':'Adicionar \u00e0 tela inicial')+'</b></span></div></div>';
+  document.body.appendChild(s);s.querySelector(".x").onclick=function(){s.remove()}}return}
  if(IP){IP.prompt();IP.userChoice.then(function(r){track("instalar_"+r.outcome);IP=null;instSai()})["catch"](function(){});return}
  if(ehIOS()&&!$("instios")){var c=document.createElement("div");c.id="instios";c.className="instios";
   c.innerHTML='<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Baixe o app no seu iPhone</h3><div class="p"><i>1</i><span>Toque em <span class="ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fcd321" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4l4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span> lá embaixo</span></div><div class="p"><i>2</i><span>Toque em <b>Adicionar à Tela de Início</b></span></div></div><div class="tri"></div>';

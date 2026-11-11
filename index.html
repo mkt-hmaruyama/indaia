@@ -426,7 +426,7 @@ select.inp2.sel{appearance:none;-webkit-appearance:none;background-image:url("da
 
 .hd-top .inst{margin-left:auto;margin-right:8px;flex:none;height:36px;border:0;border-radius:18px;background:#ff9304;color:#2a0d0d;font-weight:800;font-size:13px;padding:0 13px;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(131,1,1,.2);font-family:inherit;cursor:pointer}
 .hd-top .inst+.lamp{margin-left:0}
-@media(max-width:370px){.hd-top .inst span{display:none}.hd-top .inst{padding:0 11px}}
+@media(max-width:380px){.hd-top .inst{padding:0 10px;gap:5px;margin-right:6px}.hd-top .inst span,.hd.claro .hd-top .inst span{font-size:12.5px}.hd-top .inst svg{width:14px;height:14px}.hd-top{gap:8px}}
 .instios{position:fixed;left:0;right:0;bottom:calc(96px + env(safe-area-inset-bottom));z-index:90;padding:0 16px;display:flex;flex-direction:column;align-items:center;pointer-events:none}
 .instios .box{pointer-events:auto;background:#830101;color:#fff;border-radius:20px;padding:14px 16px 12px;width:100%;max-width:420px;box-shadow:0 10px 28px rgba(131,1,1,.4);position:relative}
 .instios .x{position:absolute;right:6px;top:2px;width:40px;height:40px;border:0;background:none;color:#ffffffbb;font-size:24px;line-height:1;cursor:pointer;font-family:inherit}
@@ -436,6 +436,7 @@ select.inp2.sel{appearance:none;-webkit-appearance:none;background-image:url("da
 .instios .ic{display:inline-grid;place-items:center;width:26px;height:26px;border:1.5px solid #fcd321;border-radius:7px;vertical-align:middle;margin:0 2px}
 .instios .tri{width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:12px solid #830101;margin-top:-1px}
 .hd-top .inst span,.hd.claro .hd-top .inst span{color:#2a0d0d;font-size:13px;font-weight:800}
+@media(max-width:340px){.hd-top .inst span{display:none}.hd-top .inst{padding:0 11px}}
 .btn.wa svg *,.nav a.wa i svg *{fill:#fff!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -1709,13 +1710,13 @@ function ehIOS(){return /iPhone|iPad|iPod/.test(navigator.userAgent)}
 function ehMovel(){return /Android|iPhone|iPad|iPod/.test(navigator.userAgent)}
 function instSai(){each(".inst",document,function(b){b.remove()});var c=$("instios");if(c)c.remove()}
 function instBtn(){var t=document.querySelector(".hd-top");if(!t||$("inst")||jaInstalado()||!ehMovel())return;if(!ehIOS()&&!IP)return;
- var b=document.createElement("button");b.className="inst";b.id="inst";b.setAttribute("aria-label","Instalar app");
- b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg><span>Instalar app</span>';
+ var b=document.createElement("button");b.className="inst";b.id="inst";b.setAttribute("aria-label","Baixar app");
+ b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg><span>Baixar app</span>';
  t.insertBefore(b,$("lamp")||null);b.onclick=instClick}
 function instClick(){track("instalar_clicou",{sistema:ehIOS()?"ios":"android"});
  if(IP){IP.prompt();IP.userChoice.then(function(r){track("instalar_"+r.outcome);IP=null;instSai()})["catch"](function(){});return}
  if(ehIOS()&&!$("instios")){var c=document.createElement("div");c.id="instios";c.className="instios";
-  c.innerHTML='<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Instale o app no seu iPhone</h3><div class="p"><i>1</i><span>Toque em <span class="ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fcd321" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4l4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span> lá embaixo</span></div><div class="p"><i>2</i><span>Toque em <b>Adicionar à Tela de Início</b></span></div></div><div class="tri"></div>';
+  c.innerHTML='<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Baixe o app no seu iPhone</h3><div class="p"><i>1</i><span>Toque em <span class="ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fcd321" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4l4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span> lá embaixo</span></div><div class="p"><i>2</i><span>Toque em <b>Adicionar à Tela de Início</b></span></div></div><div class="tri"></div>';
   document.body.appendChild(c);c.querySelector(".x").onclick=function(){c.remove()}}}
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();IP=e;instBtn()});
 window.addEventListener("appinstalled",function(){IP=null;instSai();track("instalar_concluido")});

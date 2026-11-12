@@ -437,6 +437,21 @@ select.inp2.sel{appearance:none;-webkit-appearance:none;background-image:url("da
 .instios .tri{width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:12px solid #830101;margin-top:-1px}
 .hd-top .inst span,.hd.claro .hd-top .inst span{color:#2a0d0d;font-size:13px;font-weight:800}
 @media(max-width:340px){.hd-top .inst span{display:none}.hd-top .inst{padding:0 11px}}
+
+.chips2 button .vant{font-style:normal;font-size:10px;font-weight:800;background:#830101;color:#fff;border-radius:8px;padding:2px 6px;margin-left:6px;white-space:nowrap}
+.bonus{display:flex;gap:12px;align-items:flex-start;margin-top:12px;padding:12px 14px;border-radius:16px;background:#fff4d6;border:1.5px solid #fcd321}
+.bonus[hidden]{display:none}
+.bonus .bi{flex:none;width:34px;height:34px;border-radius:50%;background:#830101;color:#fff;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center}
+.bonus b{display:block;color:#830101;font-size:14px;margin-bottom:3px}
+.bonus p{margin:0;font-size:13px;line-height:1.4;color:#5a3a30}
+
+@keyframes vantp{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(131,1,1,.45)}50%{transform:scale(1.12);box-shadow:0 0 0 6px rgba(131,1,1,0)}}
+.chips2 button .vant{display:inline-block;animation:vantp 1.6s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.chips2 button .vant{animation:none}}
+
+.bonus ul{list-style:none;margin:8px 0 0;padding:0}
+.bonus li{position:relative;padding-left:24px;margin-top:5px;font-size:13.5px;font-weight:700;color:#5a3a30}
+.bonus li::before{content:'\2713';position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:#830101;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
 .btn.wa svg *,.nav a.wa i svg *{fill:#fff!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -484,7 +499,8 @@ var CONFIG={
      Só números, com 55 + DDD + número. Exemplo: "5511999999999"            */
   whats:{
     geral:"551125542177",   // WhatsApp GERAL (+55 11 2554-2177): pagamentos, pedidos, renegociação, 2ª via de carnê
-    trafego:"551125527199"  // WhatsApp de TRÁFEGO PAGO (+55 11 2552-7199): quiz, orçamento, visita, pós-venda
+    trafego:"551125527199",  // WhatsApp de TRÁFEGO PAGO (+55 11 2552-7199): quiz, orçamento, visita, pós-venda
+    contatologia:"551129618488" // WhatsApp da CONTATOLOGIA (+55 11 2961-8488): lentes de contato. Se ficar vazio, a opção "Lentes de contato" some do orçamento.
   },
 
   /* 2) QUAL WHATSAPP CADA FERRAMENTA ABRE: "geral" ou "trafego"            */
@@ -500,7 +516,8 @@ var CONFIG={
     visita:"trafego",      // "Vou passar na loja"
     provador:"trafego",      // provador virtual
     falar_comprar:"trafego", // botão "Falar com a loja" > quero comprar
-    falar_cliente:"geral"    // botão "Falar com a loja" > já sou cliente
+    falar_cliente:"geral",   // botão "Falar com a loja" > já sou cliente
+    lentes:"contatologia"    // orçamento de lentes de contato
   },
 
   /* 3) PREÇO DAS ARMAÇÕES POR FAIXA (as mesmas faixas do quiz), em reais   */
@@ -1191,6 +1208,20 @@ var DICAS=[
 {t:"Dois óculos, dois estilos",x:"Ter um pro dia a dia e outro pra ocasiões especiais é como ter dois sapatos: muda todo o visual."},
 {t:"Óculos é acessório",x:"Assim como brinco e relógio, ele faz parte do seu visual. Escolha um que tenha a sua cara!",l:"Descobrir minha armação ›",h:"#quiz"},
 {t:"Óculos reserva salva o dia",x:"Ter um par reserva evita sufoco quando o principal quebra, some ou vai pro conserto."},
+{t:"Qual é o seu contraste?",x:"Olhe a diferença entre pele, cabelo e olhos, em qualquer tom de pele. Muita diferença pede cores fortes, como vinho e marinho. Pouca diferença fica linda com cores suaves, como rosé, caramelo e transparentes."},
+{t:"Verde e azul escuros e vinho são neutros",x:"Verde escuro, azul escuro e vinho combinam com tudo e podem substituir o preto, com mais harmonia com a pele."},
+{t:"Marrom combina com tudo",x:"É a cor de armação mais escolhida. Perfeita pra quem gosta de usar cor nas roupas e quer um óculos neutro."},
+{t:"Preto pesa?",x:"Em rostos de traços suaves, o preto pode roubar a cena. Vale provar um marinho ou verde escuro pra comparar."},
+{t:"Cor também comunica",x:"Vinho passa firmeza, verde passa equilíbrio, amarelo passa alegria. Escolha pelo que você quer transmitir!"},
+{t:"Óculos é pra você, não pro tom de pele",x:"Não existe óculos pra pele negra ou pra pele clara. Cada pessoa tem seu contraste e seu estilo."},
+{t:"Armação grossa ou fina?",x:"Grossa, em acetato, chama atenção e passa força. Fina, em metal, é leve e discreta."},
+{t:"Respeite a sobrancelha",x:"A armação fica bonita logo abaixo dela, sem cortar no meio nem esconder."},
+{t:"Pálpebra curta?",x:"Quando a pálpebra é curta, sobra pouco espaço pro óculos. Prefira armações de altura equilibrada e aros mais leves, que deixam o olhar mais aberto."},
+{t:"Cada formato conta uma história",x:"Redondo é leve e simpático, quadrado é sério, gatinho é elegante e geométrico é ousado."},
+{t:"Fosco ou brilho?",x:"A mesma cor muda tudo: fosco é discreto e sofisticado, brilhante é mais ousado."},
+{t:"Metal ou acetato?",x:"Mais discreta? Vá de metal. Gosta de moda e de ousar? Experimente acetatos criativos."},
+{t:"Cabelo grisalho?",x:"Cores vivas e modelos modernos trazem jovialidade. Cinza com cinza pode deixar o visual cansado."},
+{t:"Que imagem você quer passar?",x:"Séria, simpática, criativa? Saber isso antes facilita muito a escolha do óculos."},
 {t:"Quer ver no seu rosto?",x:"No provador virtual do app você experimenta as armações da loja usando uma selfie.",l:"Abrir o provador ›",h:"#provador"},
 {t:"Provar pessoalmente faz diferença",x:"Na loja a gente ajusta a armação no seu rosto e ajuda a escolher a lente ideal.",l:"Vou passar aí ›",h:"#visita"},
 {t:"Sabia?",x:"Os primeiros óculos surgiram na Itália, lá no século 13."},
@@ -1210,7 +1241,7 @@ function faixa(a,b){return a==b?R(a):R(a)+" a "+R(b)}
 function numero(f){var q=CONFIG.destino[f]||"trafego";return String(CONFIG.whats[q]||"").replace(/\D/g,"")}
 WA=numero("quiz"); /* o quiz usa o número da configuração */
 /* marquinha no fim de cada mensagem para a equipe saber que veio do app (ex: #app-orcamento) */
-var TAG={quiz:"quiz",orcamento:"orcamento",parcelas:"parcelas",segunda_via:"2via",pagar:"pagar",renegociar:"renegociar",pedido:"pedido",garantia:"garantia",visita:"visita",provador:"provador",falar_comprar:"comprar",falar_cliente:"cliente",dica:"dica"};
+var TAG={quiz:"quiz",orcamento:"orcamento",parcelas:"parcelas",segunda_via:"2via",pagar:"pagar",renegociar:"renegociar",pedido:"pedido",garantia:"garantia",visita:"visita",provador:"provador",falar_comprar:"comprar",falar_cliente:"cliente",dica:"dica",lentes:"lentes"};
 function marca(f,msg){return msg+"\n\n#app-"+(TAG[f]||f)}
 function waLink(f,msg){var n=numero(f);return n?"https://wa.me/"+n+"?text="+encodeURIComponent(marca(f,msg)):""}
 function toast(t){var d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},3000)}
@@ -1341,9 +1372,14 @@ function falar(){
 /* ---------- ORÇAMENTO (triagem, sem preço: a equipe passa o "a partir de") ---------- */
 var O,OS;
 function steps(){var sol=O.tipo=="sol",sg=O.tipo=="solgrau",L=[
- {k:"tipo",q:"O que você procura?",o:[["grau","Óculos de grau","Pra enxergar um futuro melhor","oculos","c1"],["sol","Óculos de sol","Sem grau, pra proteger do sol","sol","c2"],["solgrau","Óculos de sol com grau","Enxergar bem e proteger do sol","olho","c3"]]}];
+ {k:"tipo",q:"O que você procura?",o:[["grau","Óculos de grau","Pra enxergar um futuro melhor","oculos","c1"],["sol","Óculos de sol","Sem grau, pra proteger do sol","sol","c2"],["solgrau","Óculos de sol com grau","Enxergar bem e proteger do sol","olho","c3"]].concat(numero("lentes")?[["lentes","Lentes de contato","Pra enxergar bem sem óculos","olho","c5"]]:[])}];
+ if(O.tipo=="lentes")return [L[0],{k:"usa",q:"Você já usa lentes de contato?",o:[["sim","Já uso","","olho","c2"],["nao","Vai ser a primeira vez","","duvida","c1"]]},
+  {k:"receita",q:"Você tem receita do oculista?",o:[["sim","Tenho e está em dia","","doc","c4"],["venceu","Tenho, mas venceu","","relogio","c3"],["nao","Ainda não tenho","","duvida","c1"]]},
+  {k:"modelo",q:"Que tipo de lente você quer?",o:[["transparente","Transparentes","Pra enxergar bem","olho","c2"],["colorida","Coloridas","Mudam a cor dos olhos","brilho","c5"],["naosei","Não sei","A gente te ajuda","duvida","c1"]]},
+  {k:"troca",q:"Com que troca?",o:[["mensal","Mensais","Troca todo mês","relogio","c3"],["anual","Anuais","Troca uma vez por ano","relogio","c4"],["naosei","Não sei","A gente te ajuda","duvida","c1"]]},
+  {k:"nome",q:"Como podemos te chamar?",form:1}];
  if(!sol){L.push({k:"receita",q:"Você tem receita do oculista?",o:[["sim","Tenho e está em dia","","doc","c4"],["venceu","Tenho, mas venceu","","relogio","c3"],["nao","Ainda não tenho","","duvida","c1"]]});
-  L.push({k:"lente",q:"Pra que é o óculos?",o:[["simples","Longe ou perto","Uma distância só","olho","c2"],["multifocal","Longe e perto","Um óculos pra tudo","multi","c5"],["naosei","Não sei","A receita conta pra gente","duvida","c1"]]})}
+  L.push({k:"lente",q:"Pra que é o óculos?",o:[["simples","Longe ou perto","Uma distância só","olho","c2"],["multifocal","Longe e perto","Um óculos pra tudo","multi","c5"],["media","Média distância","Pra quem usa muito computador","tela","c4"],["naosei","Não sei","A receita conta pra gente","duvida","c1"]]})}
  var arm=[["econ","Econômica","Bom, bonito e no bolso","","c3","$"],["inter","Intermediária","Qualidade e preço equilibrados","","c2","$$"],["prem","Premium","Grifes e acabamento caprichado","","c1","$$$"]];
  if(!sol&&!sg)arm.push(["tenho","Já tenho","Só troco as lentes","oculos","c4"]);
  L.push({k:"armacao",q:sol?"Quanto quer investir?":"Qual armação você imagina?",grid:arm.length==4,o:arm});
@@ -1370,7 +1406,18 @@ function orcamento(reset){if(reset||!O)O={st:0,extras:[],nome:""};OS=steps();
   else{if(q.k=="tipo"&&O.tipo!=v){O={st:0,extras:[],nome:O.nome}}O[q.k]=v;b.classList.add("on");setTimeout(function(){O.st++;orcamento()},140)}}});
  if(q.multi)$("nx").onclick=function(){O.st++;orcamento()};
  window.scrollTo(0,0)}
+function orcResLentes(){
+ var msg=function(){return "Oi, Indaiá Guaianases! Fiz a triagem pelo app e queria saber sobre lentes de contato.\n\nNome: "+O.nome+"\n- Já uso lentes: "+(O.usa=="sim"?"sim":"não, vai ser a primeira vez")+"\n- Receita: "+lbl("receita",O.receita).toLowerCase()+"\n- Tipo: "+lbl("modelo",O.modelo).toLowerCase()+"\n- Troca: "+lbl("troca",O.troca).toLowerCase()+(O.receita!="nao"?"\n\nVou mandar a foto da minha receita aqui.":"")};
+ var pills=[lbl("tipo","lentes"),O.usa=="sim"?"Já uso":"Primeira vez",lbl("receita",O.receita),lbl("modelo",O.modelo),lbl("troca",O.troca)];
+ var h=top("Seu orçamento")+'<div class="pad"><div class="res2"><div class="n" style="font-size:30px">Prontinho, '+esc(O.nome.split(" ")[0])+'!</div><div class="s" style="margin-top:10px">Nossa equipe de lentes de contato te responde pelo WhatsApp.</div><div class="pills">'+pills.map(function(p){return '<span>'+esc(p)+'</span>'}).join("")+'</div></div>'
+  +waBtn("ow","Enviar pra loja")+'<button class="btn txt" id="or">Refazer</button>'
+  +(O.receita!="nao"?'<p class="mini"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>Depois, manda a foto da receita na conversa.</p>':'')+'</div>';
+ V.tool.innerHTML=h;
+ $("bk").onclick=function(){O.st--;orcamento()};
+ bindWa("ow","lentes",msg);
+ $("or").onclick=function(){orcamento(1)};window.scrollTo(0,0)}
 function orcRes(){
+ if(O.tipo=="lentes")return orcResLentes();
  var sol=O.tipo=="sol",ext=O.extras.map(function(x){return lbl("extras",x)});
  var pills=[lbl("tipo",O.tipo)].concat(sol?[]:[lbl("receita",O.receita),lbl("lente",O.lente)]).concat([lbl("armacao",O.armacao)]).concat(ext);
  var msg=function(){return "Oi, Indaiá Guaianases! Fiz a triagem pelo app e queria um orçamento.\n\nNome: "+O.nome+"\n- Procuro: "+lbl("tipo",O.tipo).toLowerCase()+(sol?"":"\n- Receita: "+lbl("receita",O.receita).toLowerCase()+"\n- Pra: "+lbl("lente",O.lente).toLowerCase())+"\n- Faixa: "+lbl("armacao",O.armacao).toLowerCase()+(sol?"":"\n- Extras: "+(ext.length?ext.join(", ").toLowerCase():"nenhum"))+(!sol&&O.receita!="nao"?"\n\nVou mandar a foto da minha receita aqui.":"")};
@@ -1424,7 +1471,7 @@ var CAMPOS={
  cpft:{rot:"CPF do titular",linha:"CPF do titular",grupo:"tit",cpf:1},
  cpf:{rot:"CPF",linha:"CPF",grupo:"busca",cpf:1},
  os:{rot:"Número da O.S.",linha:"Nº da O.S.",grupo:"busca",ph:"Ex: 345678-009",num:1,os:1,dica:"É a ordem de serviço, fica no comprovante da loja."},
- forma:{rot:"Como quer pagar?",linha:"Quero pagar por",obr:1,ops:["Pix","Transferência ou depósito","Na loja"]},
+ forma:{rot:"Como quer pagar?",linha:"Quero pagar por",obr:1,ops:["Na loja","Pix","Transferência ou depósito"],bonus:{op:"Na loja",tit:"Pague na loja e ganhe mais",itens:["Desconto na parcela","Limpeza ultrassônica no seu óculos","Cafezinho com a gente"],txt:"Pagando em dinheiro aqui na loja, você ganha:"}},
  conta:{rot:"Quer contar algo?",linha:"Recado",area:1,ph:"Opcional"},
  quando:{rot:"Quando comprou?",linha:"Comprei em",mesano:1},
  gnome:{rot:"Nome completo",linha:"Nome",grupo:"id",auto:"name"},
@@ -1477,7 +1524,7 @@ function regrasVisita(val){var A=(CONFIG.loja||{}).abre;if(!A)return;
 function pedido(p,direto){if(p.loja)return pedidoLoja(p,direto);var val={},ng=0,G={};track("pedido_aberto",{pedido:p.id});
  var h=top(esc(p.curto))+'<div class="pad"><h2 class="q" style="margin-bottom:8px">'+esc(p.titulo)+'</h2><p class="mini" style="text-align:left;margin:0 4px 20px">'+esc(p.desc)+'</p>';
  p.campos.forEach(function(k){var c=CAMPOS[k];if(!c)return;h+='<div class="fld"><label class="lb">'+c.rot+'</label>'+(c.dica?'<p class="dica">'+c.dica+'</p>':'');
-  if(c.ops)h+='<div class="chips2 g'+((ng++)%3+1)+'" data-k="'+k+'">'+c.ops.map(function(o){var ik=CHIPIC[o];return '<button data-v="'+o+'">'+(ik&&IC[ik]?IC[ik]:'')+o+'</button>'}).join("")+'</div>';
+  if(c.ops)h+='<div class="chips2 g'+((ng++)%3+1)+'" data-k="'+k+'">'+c.ops.map(function(o){var ik=CHIPIC[o];return '<button data-v="'+o+'">'+(ik&&IC[ik]?IC[ik]:'')+o+(c.bonus&&o==c.bonus.op?'<i class="vant">Vantagem</i>':'')+'</button>'}).join("")+'</div>'+(c.bonus?'<div class="bonus" id="bn_'+k+'" hidden><span class="bi">$</span><div><b>'+c.bonus.tit+'</b><p>'+c.bonus.txt+'</p><ul>'+c.bonus.itens.map(function(i){return '<li>'+i+'</li>'}).join('')+'</ul></div></div>':'');
   else if(c.mesano){var MS=["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],Y=new Date().getFullYear();
     h+='<div class="mesano2" data-k="'+k+'"><div class="anos">'+[Y,Y-1,Y-2].map(function(y){return '<button type="button" data-a="'+y+'">'+y+'</button>'}).join("")+'</div><div class="meses">'+MS.map(function(m,i){return '<button type="button" data-m="'+i+'">'+m+'</button>'}).join("")+'</div></div>'}
   else if(c.area)h+='<textarea class="inp2" data-k="'+k+'" placeholder="'+(c.ph||"")+'"></textarea>';
@@ -1491,7 +1538,7 @@ function pedido(p,direto){if(p.loja)return pedidoLoja(p,direto);var val={},ng=0,
     val[k]=(sm!=null?MSL[sm]:"")+(sm!=null&&sa?" de ":"")+(sa||"");$("ke").textContent=""}
    each(".anos button",g,function(b){b.onclick=function(){var v=+b.dataset.a;sa=(sa===v?null:v);upd()}});each(".meses button",g,function(b){b.onclick=function(){var v=+b.dataset.m;sm=(sm===v?null:v);upd()}}); /* tocar de novo desmarca */upd()});
  each("input.inp2,textarea.inp2",V.tool,function(i){i.oninput=function(){if(CAMPOS[i.dataset.k].cpf)i.value=fmtCpf(i.value);if(CAMPOS[i.dataset.k].os)i.value=fmtOs(i.value);val[i.dataset.k]=i.value.trim();$("ke").textContent=""}});
- each(".chips2",V.tool,function(g){each("button",g,function(b){b.onclick=function(){val[g.dataset.k]=b.dataset.v;each("button",g,function(x){x.classList.toggle("on",x==b)})}})});
+ each(".chips2",V.tool,function(g){each("button",g,function(b){b.onclick=function(){val[g.dataset.k]=b.dataset.v;each("button",g,function(x){x.classList.toggle("on",x==b)});var bx=$("bn_"+g.dataset.k);if(bx)bx.hidden=(b.dataset.v!=CAMPOS[g.dataset.k].bonus.op)}})});
  if(p.id=="visita")regrasVisita(val);
  if(PRESEL){for(var pk in PRESEL){var cb=V.tool.querySelector('.chips2[data-k="'+pk+'"] button[data-v="'+PRESEL[pk]+'"]');if(cb)cb.click()}PRESEL=null}
  bindWa("kw",p.id,function(){var m=p.msg+"\n";p.campos.forEach(function(k){if(val[k])m+="\n"+CAMPOS[k].linha+": "+val[k]});return m},

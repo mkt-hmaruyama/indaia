@@ -452,6 +452,9 @@ select.inp2.sel{appearance:none;-webkit-appearance:none;background-image:url("da
 .bonus ul{list-style:none;margin:8px 0 0;padding:0}
 .bonus li{position:relative;padding-left:24px;margin-top:5px;font-size:13.5px;font-weight:700;color:#5a3a30}
 .bonus li::before{content:'\2713';position:absolute;left:0;top:0;width:18px;height:18px;border-radius:50%;background:#830101;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.redes a[data-r="insta"]{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fd5949 45%,#d6249f 60%,#285aeb 95%);color:#fff;box-shadow:0 4px 12px rgba(214,36,159,.25)}
+.redes a[data-r="face"]{background:#1877f2;color:#fff;box-shadow:0 4px 12px rgba(24,119,242,.25)}
+.redes a[data-r="site"]{background:#fcd321;color:#830101;box-shadow:0 4px 12px rgba(252,211,33,.35)}
 .btn.wa svg *,.nav a.wa i svg *{fill:#fff!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -513,7 +516,8 @@ var CONFIG={
     renegociar:"geral",
     pedido:"geral",
     garantia:"geral",       // equipe da operação
-    visita:"trafego",      // "Vou passar na loja"
+    visita:"trafego",      // "Vou passar na loja": provar armações e trazer receita
+    visita_loja:"geral",   // "Vou passar na loja": buscar óculos e fazer ajuste
     provador:"trafego",      // provador virtual
     falar_comprar:"trafego", // botão "Falar com a loja" > quero comprar
     falar_cliente:"geral",   // botão "Falar com a loja" > já sou cliente
@@ -545,7 +549,8 @@ var CONFIG={
   /* 5b) VOU PASSAR NA LOJA (não é horário marcado, é só um aviso pra equipe) */
   visita:{id:"visita", curto:"Vou passar na loja", titulo:"Vou passar na loja", desc:"Avisa e a gente te espera.",
     campos:["dia","periodo","motivo","nomec"],
-    motivos:["Provar armações","Trazer minha receita","Buscar meu óculos","Fazer um ajuste"], // [CONFIRMAR] se tiver exame de vista, inclua "Fazer exame de vista"
+    motivos:["Provar armações","Trocar as lentes","Buscar meu óculos","Fazer um ajuste"], // [CONFIRMAR] se tiver exame de vista, inclua "Fazer exame de vista"
+    motivoDestino:{"Buscar meu óculos":"visita_loja","Fazer um ajuste":"visita_loja"}, // esses motivos vão pro WhatsApp geral; os outros vão pro de tráfego
     nota:"Não é horário marcado, tá? É só pra gente saber que você vem.",
     msg:"Oi, Indaiá Guaianases! Vou passar na loja."},
 
@@ -1241,14 +1246,14 @@ function faixa(a,b){return a==b?R(a):R(a)+" a "+R(b)}
 function numero(f){var q=CONFIG.destino[f]||"trafego";return String(CONFIG.whats[q]||"").replace(/\D/g,"")}
 WA=numero("quiz"); /* o quiz usa o número da configuração */
 /* marquinha no fim de cada mensagem para a equipe saber que veio do app (ex: #app-orcamento) */
-var TAG={quiz:"quiz",orcamento:"orcamento",parcelas:"parcelas",segunda_via:"2via",pagar:"pagar",renegociar:"renegociar",pedido:"pedido",garantia:"garantia",visita:"visita",provador:"provador",falar_comprar:"comprar",falar_cliente:"cliente",dica:"dica",lentes:"lentes"};
+var TAG={quiz:"quiz",orcamento:"orcamento",parcelas:"parcelas",segunda_via:"2via",pagar:"pagar",renegociar:"renegociar",pedido:"pedido",garantia:"garantia",visita:"visita",visita_loja:"visita",provador:"provador",falar_comprar:"comprar",falar_cliente:"cliente",dica:"dica",lentes:"lentes"};
 function marca(f,msg){return msg+"\n\n#app-"+(TAG[f]||f)}
 function waLink(f,msg){var n=numero(f);return n?"https://wa.me/"+n+"?text="+encodeURIComponent(marca(f,msg)):""}
 function toast(t){var d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},3000)}
 function waBtn(id,label){return '<a class="btn wa" id="'+id+'" target="_blank" rel="noopener" href="#">'+WAICON+esc(label)+'</a>'}
 /* o link fica pronto ANTES do toque (algumas telas não deixam trocar o link na hora do clique) */
-function bindWa(id,ferr,build,valid){var a=$(id);if(!a)return;
-  function upd(){var u=waLink(ferr,build());a.setAttribute("href",u||"#")}
+function bindWa(id,ferr0,build,valid){var a=$(id);if(!a)return;var ferr=ferr0;
+  function upd(){ferr=(typeof ferr0=="function")?ferr0():ferr0;var u=waLink(ferr,build());a.setAttribute("href",u||"#")}
   upd();
   ["pointerdown","touchstart","mousedown","focus"].forEach(function(ev){a.addEventListener(ev,upd,{passive:true})});
   var root=a.closest(".scr,.sheet")||document;root.addEventListener("input",upd);root.addEventListener("click",function(e){if(e.target.closest("button"))setTimeout(upd,0)});
@@ -1462,7 +1467,7 @@ function redesHub(){var r=CONFIG.redes||[];if(!r.length)return "";
  return '<div class="redes"><span>Siga a Indaiá Guaianases</span><div>'+r.map(function(x){return '<a href="'+esc(x.link)+'" target="_blank" rel="noopener" aria-label="'+esc(x.nome)+'" data-r="'+x.id+'">'+(IC[x.id]||IC.site)+'</a>'}).join("")+'</div></div>'}
 function bindRedes(root){each(".redes a,a.rede",root,function(a){a.addEventListener("click",function(){track("rede_click",{rede:a.dataset.r})})})}
 var CHIPIC={"Hoje":"relogio","Amanhã":"cal","Esta semana":"cal","Semana que vem":"cal","Próximo sábado":"calfds","No fim de semana":"calfds","No sábado":"calfds","Manhã":"sol","Tarde":"tarde",
- "Provar armações":"oculos","Trazer minha receita":"doc","Buscar meu óculos":"caixa","Fazer um ajuste":"chave","Fazer exame de vista":"olho",
+ "Provar armações":"oculos","Trocar as lentes":"doc","Buscar meu óculos":"caixa","Fazer um ajuste":"chave","Fazer exame de vista":"olho",
  "Pix":"pix","Transferência ou depósito":"banco","Na loja":"loja"};
 var CAMPOS={
  nome:{rot:"Nome completo",linha:"Nome",obr:1,auto:"name"},
@@ -1541,7 +1546,7 @@ function pedido(p,direto){if(p.loja)return pedidoLoja(p,direto);var val={},ng=0,
  each(".chips2",V.tool,function(g){each("button",g,function(b){b.onclick=function(){val[g.dataset.k]=b.dataset.v;each("button",g,function(x){x.classList.toggle("on",x==b)});var bx=$("bn_"+g.dataset.k);if(bx)bx.hidden=(b.dataset.v!=CAMPOS[g.dataset.k].bonus.op)}})});
  if(p.id=="visita")regrasVisita(val);
  if(PRESEL){for(var pk in PRESEL){var cb=V.tool.querySelector('.chips2[data-k="'+pk+'"] button[data-v="'+PRESEL[pk]+'"]');if(cb)cb.click()}PRESEL=null}
- bindWa("kw",p.id,function(){var m=p.msg+"\n";p.campos.forEach(function(k){if(val[k])m+="\n"+CAMPOS[k].linha+": "+val[k]});return m},
+ bindWa("kw",p.id=="visita"?function(){var vm=CONFIG.visita.motivoDestino||{};return vm[val.motivo]||"visita"}:p.id,function(){var m=p.msg+"\n";p.campos.forEach(function(k){if(val[k])m+="\n"+CAMPOS[k].linha+": "+val[k]});return m},
   function(){var grp={};for(var i=0;i<p.campos.length;i++){var k=p.campos[i],c=CAMPOS[k];if(!c)continue;
    if(c.grupo){grp[c.grupo]=grp[c.grupo]||!!val[k]}
    if(c.obr&&!val[k]){$("ke").textContent="Falta: "+c.rot.replace("?","").toLowerCase();return false}

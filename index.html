@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-title" content="Guaianases">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <!-- AGENCIA: a medição já está pronta. O quiz envia estes eventos para window.dataLayer (Google Tag Manager / GA4) e, se o Pixel da Meta (fbq) existir, também para ele: quiz_start, quiz_answer (pergunta, resposta), quiz_complete (publico, rosto, estilo, uso, cor, faixa), whatsapp_click (modelo, posicao, faixa; vira o evento Contact no Pixel) e quiz_restart. Basta colar o snippet do GTM e/ou do Pixel aqui no head. -->
-<title>App Ótica Indaiá Guaianases</title>
+<title>App Ótica Indaiá Guaianases (app)</title>
 <meta name="description" content="Experimente armações no seu rosto, descubra a ideal pra você e peça seu orçamento pelo celular.">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
@@ -246,6 +246,9 @@ textarea.inp2{min-height:96px;resize:vertical;font-size:16px}
 .info .hr{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--soft);font-size:15px}
 .info .hr:first-of-type{border-top:0}
 .info .hr b{font-size:15px}
+.info .hr.esp{background:#fff3c4;border-top:0;border-radius:10px;padding:8px 10px;margin-bottom:4px}
+.info .hr.esp span,.info .hr.esp b{color:#830101;font-weight:700}
+.info .hr.esp b{white-space:nowrap}
 .pend{font-style:normal;font-weight:600;color:var(--mut);background:var(--soft);padding:2px 8px;border-radius:8px;font-size:13px}
 .btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .btn.alt svg[viewBox="0 0 32 32"] *{fill:var(--ac)!important;stroke:none}
@@ -537,7 +540,12 @@ var CONFIG={
     horarios:[["Segunda a sexta","8h30 às 18h"],["Sábado","8h30 às 16h"],["Domingo","Fechado"]],
     /* horário em números, usado pra desabilitar dias e períodos fechados no "Vou passar na loja".
        [abre, fecha] em horas (8.5 = 8h30). null = fechado. Ordem: domingo, segunda ... sábado */
-    abre:[null,[8.5,18],[8.5,18],[8.5,18],[8.5,18],[8.5,18],[8.5,16]] }, // ex: ["Sábado","9h às 14h"]
+    abre:[null,[8.5,18],[8.5,18],[8.5,18],[8.5,18],[8.5,18],[8.5,16]], // ex: ["Sábado","9h às 14h"]
+    /* feriados e dias com horário diferente: data (ano-mês-dia), nome, horas [abre, fecha] (null = fechado) e o texto do horário.
+       Aparecem na aba A loja a partir de 10 dias antes e somem depois do dia. */
+    especiais:[
+      {data:"2026-11-20", nome:"Sexta, 20/11 (feriado)", horas:[8.5,16], texto:"8h30 às 16h"}
+    ] },
   mapa:"https://www.google.com/maps/search/?api=1&query=%C3%93tica%20Indai%C3%A1%2C%20R.%20Salvador%20Gianetti%2C%201128%20-%20Guaianases%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008410-000",   // toque no endereço: abre a loja no Google Maps
   rota:"https://www.google.com/maps/dir/?api=1&destination=%C3%93tica%20Indai%C3%A1%2C%20R.%20Salvador%20Gianetti%2C%201128%20-%20Guaianases%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008410-000",  // "Como chegar": abre o Maps já traçando a rota
   banner:["labelle_gatinho","justcavalli_vinho","clicquot_azul","rose","gap_preto","supreme_prata","anima","akira_preto"],
@@ -1534,7 +1542,11 @@ function pedidos(){
  each("[data-i]",V.tool,function(b){b.onclick=function(){pedido(CONFIG.pedidos[+b.dataset.i])}});window.scrollTo(0,0)}
 function fmtCpf(v){v=v.replace(/\D/g,"").slice(0,11);return v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")}
 var PRESEL=null;
-function horasHTML(){var L=CONFIG.loja||{};return (L.horarios||[]).map(function(x){return '<div class="hr"><span>'+esc(x[0])+'</span><b>'+(x[1]?esc(x[1]):'<i class="pend">a preencher</i>')+'</b></div>'}).join("")}
+function isoDia(dt){return dt.getFullYear()+"-"+("0"+(dt.getMonth()+1)).slice(-2)+"-"+("0"+dt.getDate()).slice(-2)}
+function especiaisMapa(){var m={};((CONFIG.loja||{}).especiais||[]).forEach(function(e){m[e.data]=e.horas||null});return m}
+function especiaisHTML(){var hoje=new Date();hoje.setHours(0,0,0,0);
+ return ((CONFIG.loja||{}).especiais||[]).filter(function(e){var p=e.data.split("-"),d=new Date(+p[0],p[1]-1,+p[2]),dias=(d-hoje)/864e5;return dias>=0&&dias<=10}).map(function(e){return '<div class="hr esp"><span>'+esc(e.nome)+'</span><b>'+esc(e.horas?e.texto:"Fechado")+'</b></div>'}).join("")}
+function horasHTML(){var L=CONFIG.loja||{};return especiaisHTML()+(L.horarios||[]).map(function(x){return '<div class="hr"><span>'+esc(x[0])+'</span><b>'+(x[1]?esc(x[1]):'<i class="pend">a preencher</i>')+'</b></div>'}).join("")}
 function pedidoLoja(p,direto){var L=CONFIG.loja||{},M=CONFIG.mapa;track("pedido_aberto",{pedido:p.id});
  V.tool.innerHTML=top(esc(p.curto))+'<div class="pad"><h2 class="q" style="margin-bottom:8px">'+esc(p.titulo)+'</h2><p class="mini" style="text-align:left;margin:0 4px 18px">'+esc(p.desc)+'</p>'
  +'<a class="info" '+(M?'href="'+M+'" target="_blank" rel="noopener"':'')+'><span class="ico c1">'+IC.pino+'</span><div style="flex:1"><small>Endereço</small><b>'+esc(L.endereco||"")+'</b><span>'+esc(L.bairro||"")+'</span></div>'+(M?'<span class="go" style="align-self:center;color:var(--mut);font-size:22px">›</span>':'')+'</a>'
@@ -1546,7 +1558,8 @@ function pedidoLoja(p,direto){var L=CONFIG.loja||{},M=CONFIG.mapa;track("pedido_
 /* regras do "Vou passar na loja": desabilita dia e período em que a loja está fechada */
 function regrasVisita(val){var A=(CONFIG.loja||{}).abre;if(!A)return;
  var d=new Date(),dow=d.getDay(),h=d.getHours()+d.getMinutes()/60,MARGEM=.5;
- function aberto(x){return A[x%7]}
+ var ESP=especiaisMapa();
+ function aberto(x){var dt=new Date(d.getFullYear(),d.getMonth(),d.getDate()+(x-dow)),k=isoDia(dt);if(k in ESP)return ESP[k];return A[x%7]}
  function hojeOk(){var a=aberto(dow);return a&&h<a[1]-MARGEM}
  var dia={"Hoje":hojeOk()?0:(aberto(dow)?"Já fechou":"Fechado hoje"),
   "Amanhã":aberto(dow+1)?0:"Fechado",

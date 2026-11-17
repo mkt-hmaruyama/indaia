@@ -434,6 +434,16 @@ select.inp2.sel{appearance:none;-webkit-appearance:none;background-image:url("da
 .instios .p i{flex:none;width:22px;height:22px;border-radius:50%;background:#ff9304;color:#2a0d0d;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:800}
 .instios .ic{display:inline-grid;place-items:center;width:26px;height:26px;border:1.5px solid #fcd321;border-radius:7px;vertical-align:middle;margin:0 2px}
 .instios .tri{width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-top:12px solid #830101;margin-top:-1px}
+.instios.topo{top:calc(6px + env(safe-area-inset-top));bottom:auto;align-items:flex-end}
+.instios .tri.up{border-top:0;border-bottom:12px solid #830101;margin:0 24px -1px 0}
+.priv-lk{display:block;margin:12px auto 6px;background:none;border:0;font:inherit;font-size:13px;font-weight:700;color:var(--mut);text-decoration:underline;padding:10px 14px;cursor:pointer}
+.sheet .box.pv{max-height:88vh;overflow-y:auto;touch-action:auto;padding-left:20px;padding-right:20px}
+.pv .pv-tp{display:flex;align-items:center;justify-content:space-between;margin:0 0 4px}
+.pv .pv-tp h2{margin:0}
+.pv .pv-x{width:44px;height:44px;border:0;background:none;font-size:20px;color:var(--mut);cursor:pointer}
+.pv p{margin:0 0 4px;font-size:15px;line-height:1.5}
+.pv h4{margin:16px 0 4px;font-size:16px;color:#830101}
+.pv .pv-rp{margin-top:18px;font-size:13px;color:var(--mut)}
 .hd-top .inst span,.hd.claro .hd-top .inst span{color:#2a0d0d;font-size:13px;font-weight:800}
 @media(max-width:340px){.hd-top .inst span{display:none}.hd-top .inst{padding:0 11px}}
 
@@ -1347,8 +1357,25 @@ function hub(){
  +'</header>'
  +'<a class="promo" href="#quiz"><div class="pt"><small>Quiz · 1 minuto</small><b>Qual armação tem a sua cara?</b><span class="pill">Descobrir ›</span></div><div class="stack" id="stk"></div></a>'
  +'<h3 class="sec">Ferramentas</h3><div class="acts"><a class="act" href="#orcamento">'+ico("calc","c2")+'Orçamento</a><a class="act" href="#provador">'+ico("espelho","c5")+'Provador virtual</a><a class="act" href="#visita">'+ico("loja","c4")+'Vou passar na loja</a></div>'
- +'<h3 class="sec">Resolva rapidinho</h3><div class="quick">'+q+'</div>'+redesHub();
- each(".qk",V.hub,function(a){a.onclick=function(){PEND=a.dataset.p}});banner();lampada();instBtn();bindRedes(V.hub)}
+ +'<h3 class="sec">Resolva rapidinho</h3><div class="quick">'+q+'</div>'+redesHub()+'<button class="priv-lk" id="privlk">Privacidade</button>';
+ each(".qk",V.hub,function(a){a.onclick=function(){PEND=a.dataset.p}});banner();lampada();instBtn();bindRedes(V.hub);var pl=$("privlk");if(pl)pl.onclick=privAbrir}
+/* ---------- AVISO DE PRIVACIDADE (LGPD) ---------- */
+var PRIV_RESP='Otica Salvador Gianetti Ltda (EPP), CNPJ 04.819.110/0001-30';
+function privAbrir(){track("privacidade_aberta");
+ var s=document.createElement("div");s.className="sheet";
+ s.innerHTML='<div class="box pv"><div class="grab"></div><div class="pv-tp"><h2>Aviso de privacidade</h2><button class="pv-x" id="pvx" aria-label="Fechar">✕</button></div>'
+ +'<p>Este app foi feito pra facilitar seu atendimento com a Ótica Indaiá Guaianases. Aqui a gente explica, de um jeito simples, como ele cuida das suas informações.</p>'
+ +'<h4>O que o app não faz</h4><p>Não pede cadastro nem senha. Não guarda seus dados em nenhum servidor. Não salva nem envia as fotos do provador virtual.</p>'
+ +'<h4>Provador virtual</h4><p>A câmera é usada só pra você ver as armações no seu rosto. A foto fica apenas no seu celular enquanto você usa o provador e é apagada quando você sai. Ninguém da loja tem acesso a ela.</p>'
+ +'<h4>Quando você fala com a loja</h4><p>Quando você pede um orçamento ou faz outra solicitação, o app monta uma mensagem e abre o seu WhatsApp. Nada é enviado sem você tocar em enviar. Daí em diante, a conversa segue pelo WhatsApp da loja, como em qualquer atendimento.</p>'
+ +'<h4>Informações no seu celular</h4><p>O app guarda algumas preferências simples no próprio aparelho, por exemplo se você já avaliou a loja, só pra não repetir avisos. Pra apagar, é só limpar os dados do navegador.</p>'
+ +'<h4>Seus direitos</h4><p>Pela LGPD, você pode pedir informações sobre seus dados ou pedir que eles sejam apagados das conversas com a loja. É só falar com a gente pelo WhatsApp (11) 2554-2177 ou na loja: R. Salvador Gianetti, 1128, Guaianases.</p>'
+ +'<p class="pv-rp">Responsável: '+PRIV_RESP+'</p>'
+ +'<button class="btn txt" id="pvf">Fechar</button></div>';
+ document.body.appendChild(s);var box=s.querySelector(".box");
+ function close(semVoltar){if(s._fechou)return;s._fechou=1;if(SHC===close)SHC=null;if(!semVoltar&&history.state&&history.state.sheet)history.back();box.style.transition="transform .2s";box.style.transform="translateY(110%)";s.style.transition="opacity .2s";s.style.opacity="0";setTimeout(function(){s.remove()},200)}
+ try{history.pushState({sheet:1},"")}catch(er){}SHC=close;
+ s.onclick=function(e){if(e.target==s)close()};$("pvx").onclick=function(){close()};$("pvf").onclick=function(){close()}}
 /* ===== Dica do dia ===== */
 function hoje(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
 function dicaIdx(){var d=new Date();var n=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5);return window.DICAS&&DICAS.length?n%DICAS.length:0}
@@ -1785,8 +1812,11 @@ window.provarArmacao=function(img){var i=-1;CONFIG.provador.forEach(function(o,k
 /* instalar o app: Android abre a instalação do celular; iPhone mostra o passo a passo */
 var IP=null;
 function jaInstalado(){return (window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true}
-function ehIOS(){return /iPhone|iPad|iPod/.test(navigator.userAgent)}
-function ehMovel(){return /Android|iPhone|iPad|iPod/.test(navigator.userAgent)}
+function ehIPad(){return /iPad/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)}
+function ehIOS(){return /iPhone|iPad|iPod/.test(navigator.userAgent)||ehIPad()}
+/* no iPhone, Chrome, Firefox, Edge e app do Google mostram o compartilhar lá em cima; no iPad também */
+function iosTopo(){return /CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(navigator.userAgent)||ehIPad()}
+function ehMovel(){return /Android|iPhone|iPad|iPod/.test(navigator.userAgent)||ehIPad()}
 function instSai(){each(".inst",document,function(b){b.remove()});var c=$("instios");if(c)c.remove()}
 function instBtn(){var t=document.querySelector(".hd-top");if(!t||$("inst")||jaInstalado()||!ehMovel())return;if(!ehIOS()&&!IP&&!emApp())return;
  var b=document.createElement("button");b.className="inst";b.id="inst";b.setAttribute("aria-label","Baixar app");
@@ -1795,7 +1825,7 @@ function instBtn(){var t=document.querySelector(".hd-top");if(!t||$("inst")||jaI
 function ehChrome(){var u=navigator.userAgent;return /Android/.test(u)&&/Chrome\//.test(u)&&!/SamsungBrowser|OPR\/|Opera|EdgA|Edg\/|Firefox|UCBrowser|MiuiBrowser|HuaweiBrowser|DuckDuckGo|; wv\)|Instagram|FBAN|FBAV/.test(u)}
 function emApp(){return /Instagram|FBAN|FBAV|FB_IAB/.test(navigator.userAgent)}
 function ehSamsung(){return /SamsungBrowser/.test(navigator.userAgent)}
-function instClick(){track("instalar_clicou",{sistema:ehIOS()?"ios":ehSamsung()?"samsung":"android"});
+function instClick(){track("instalar_clicou",{sistema:ehIOS()?(iosTopo()?"ios_topo":"ios_safari"):ehSamsung()?"samsung":"android"});
  if(emApp()){if(!$("instios")){var q=document.createElement("div");q.id="instios";q.className="instios";
   q.innerHTML='<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Abra no navegador pra baixar</h3><div class="p"><i>1</i><span>Toque nos <b>3 pontinhos</b> '+(ehIOS()?'(ou no \u00edcone da b\u00fassola) ':'')+'aqui do Instagram</span></div><div class="p"><i>2</i><span>Escolha <b>Abrir no '+(ehIOS()?'Safari':'navegador')+'</b></span></div><div class="p"><i>3</i><span>L\u00e1 vai aparecer o bot\u00e3o <b>Baixar app</b></span></div></div>';
   document.body.appendChild(q);q.querySelector(".x").onclick=function(){q.remove()}}return}
@@ -1804,7 +1834,7 @@ function instClick(){track("instalar_clicou",{sistema:ehIOS()?"ios":ehSamsung()?
   document.body.appendChild(s);s.querySelector(".x").onclick=function(){s.remove()}}return}
  if(IP){IP.prompt();IP.userChoice.then(function(r){track("instalar_"+r.outcome);IP=null;instSai()})["catch"](function(){});return}
  if(ehIOS()&&!$("instios")){var c=document.createElement("div");c.id="instios";c.className="instios";
-  c.innerHTML='<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Baixe o app no seu iPhone</h3><div class="p"><i>1</i><span>Toque em <span class="ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fcd321" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4l4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span> lá embaixo</span></div><div class="p"><i>2</i><span>Toque em <b>Adicionar à Tela de Início</b></span></div></div><div class="tri"></div>';
+  var topo=iosTopo(),ICO='<span class="ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fcd321" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0L8 7m4-4l4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></svg></span>';if(topo)c.className+=' topo';c.innerHTML=(topo?'<div class="tri up"></div>':'')+'<div class="box"><button class="x" aria-label="Fechar">\u00d7</button><h3>Baixe o app no seu '+(ehIPad()?'iPad':'iPhone')+'</h3><div class="p"><i>1</i><span>'+(topo?'Toque em '+ICO+' lá em cima, ao lado do endereço':'Toque em '+ICO+' na barra de baixo (se não aparecer, toque em <b>\u22ef</b> antes)')+'</span></div><div class="p"><i>2</i><span>Role a lista e toque em <b>Adicionar à Tela de Início</b></span></div></div>'+(topo?'':'<div class="tri"></div>');
   document.body.appendChild(c);c.querySelector(".x").onclick=function(){c.remove()}}}
 window.addEventListener("beforeinstallprompt",function(e){e.preventDefault();IP=e;instBtn()});
 window.addEventListener("appinstalled",function(){IP=null;instSai();track("instalar_concluido")});

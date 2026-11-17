@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#830101">
 <meta name="color-scheme" content="light only">
-<link rel="manifest" href="manifest.webmanifest">
+<script>/* no Samsung Internet o app vira atalho (sem pacote de app), pra evitar o aviso do Play Protect em alguns celulares */
+(function(){if(!/SamsungBrowser/i.test(navigator.userAgent)){var l=document.createElement("link");l.rel="manifest";l.href="manifest.webmanifest";document.head.appendChild(l)}})()</script>
 <link rel="icon" type="image/png" sizes="192x192" href="icones/icone-192.png">
 <link rel="apple-touch-icon" href="icones/icone-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1831,7 +1832,7 @@ function ehIOS(){return /iPhone|iPad|iPod/.test(navigator.userAgent)||ehIPad()}
 function iosTopo(){return /CriOS|FxiOS|EdgiOS|OPiOS|GSA\//.test(navigator.userAgent)||ehIPad()}
 function ehMovel(){return /Android|iPhone|iPad|iPod/.test(navigator.userAgent)||ehIPad()}
 function instSai(){each(".inst",document,function(b){b.remove()});var c=$("instios");if(c)c.remove()}
-function instBtn(){var t=document.querySelector(".hd-top");if(!t||$("inst")||jaInstalado()||!ehMovel())return;if(!ehIOS()&&!IP&&!emApp())return;
+function instBtn(){var t=document.querySelector(".hd-top");if(!t||$("inst")||jaInstalado()||!ehMovel())return;if(!ehIOS()&&!IP&&!emApp()&&!ehSamsung())return;
  var b=document.createElement("button");b.className="inst";b.id="inst";b.setAttribute("aria-label","Baixar app");
  b.innerHTML='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg><span>Baixar app</span>';
  t.insertBefore(b,$("lamp")||null);b.onclick=instClick}
